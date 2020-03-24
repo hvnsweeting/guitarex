@@ -17,4 +17,12 @@ defmodule GuitarexTest do
   test "E after 1 steps is F" do
     assert Guitarex.up("E", 1) == "F"
   end
+
+  test "Chord C consists of C E G" do
+    assert Guitarex.chord("C", :major) == MapSet.new(["C", "E", "G"])
+  end
+
+  test "Chord Am consists of A C E" do
+    assert Guitarex.chord("A", :minor) == MapSet.new(["A", "C", "E"])
+  end
 end

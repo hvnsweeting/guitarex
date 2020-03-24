@@ -3,15 +3,46 @@ defmodule Guitarex do
   Documentation for `Guitarex`.
   """
 
+  def chord(base, :major) do
+    MapSet.new([base, up(base, 4), up(base, 7)])
+  end
+
+  def chord(base, :minor) do
+    MapSet.new([base, up(base, 3), up(base, 7)])
+  end
+
+  def chord_frets(base, type) do
+    notes_in_chord = chord(base, type)
+
+    guitar_strings()
+    |> Enum.map(fn xs ->
+      Enum.map(xs, fn c ->
+        if MapSet.member?(notes_in_chord, c) do
+          c
+        else
+          " "
+        end
+      end)
+    end)
+    |> Enum.reverse()
+    |> display_frets
+  end
+
   @doc """
   Display a guitar with all nodes
   """
   def main do
-    strings =
-      ["E", "A", "D", "G", "B", "E"]
-      |> Enum.reverse()
-      |> Enum.map(fn base -> build_string(base) end)
+    guitar_strings()
+    |> Enum.reverse()
+    |> display_frets
+  end
 
+  def guitar_strings() do
+    ["E", "A", "D", "G", "B", "E"]
+    |> Enum.map(fn base -> build_string(base) end)
+  end
+
+  def display_frets(strings) do
     counter_bar = Enum.to_list(0..12) |> Enum.map(fn x -> Integer.to_string(x) end)
 
     (strings ++ [counter_bar])
